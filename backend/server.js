@@ -6,7 +6,9 @@ import pokemonRoutes from "./src/routes/pokemonRoutes.js";
 
 dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 5050;
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
@@ -14,12 +16,9 @@ app.use(express.json());
 app.use("/api/pokemon", pokemonRoutes);
 
 // Base route
-app.get("/", (req, res) => {
-  res.send("Pokedex API is running...");
-});
+app.get("/", (req, res) => res.send("✅ Pokedex API is running!"));
 
-const PORT = process.env.PORT || 5000;
-
+// Start server after connecting to DB
 connectDB().then(() => {
   app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
 });

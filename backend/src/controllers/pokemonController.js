@@ -1,5 +1,6 @@
 import Pokemon from "../models/Pokemon.js";
 
+// Get all Pokémon (limited for now)
 export const getAllPokemon = async (req, res) => {
   try {
     const pokemons = await Pokemon.find().limit(20);
@@ -9,6 +10,7 @@ export const getAllPokemon = async (req, res) => {
   }
 };
 
+// Get Pokémon by name
 export const getPokemonByName = async (req, res) => {
   try {
     const pokemon = await Pokemon.findOne({ name: req.params.name.toLowerCase() });
