@@ -3,9 +3,13 @@ import { getAllPokemon, getPokemonByName, getPokemonNames } from "../controllers
 
 const router = express.Router();
 
-// ✅ Specific routes must come before dynamic ones
+// Autocomplete: all names
 router.get("/names/all", getPokemonNames);
+
+// Get single Pokémon by name
 router.get("/:name", getPokemonByName);
+
+// Get full Pokémon list
 router.get("/", getAllPokemon);
 
 export default router;

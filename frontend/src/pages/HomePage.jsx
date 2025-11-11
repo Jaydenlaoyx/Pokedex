@@ -1,71 +1,74 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPokemonNames } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/HomePage.module.css";
 
-export default function HomePage() {
+const HomePage = () => {
   const [search, setSearch] = useState("");
   const [allNames, setAllNames] = useState([]);
-  const [suggestions, setSuggestions] = useState([]);
+  const [filteredNames, setFilteredNames] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch all Pokémon names for autocomplete
   useEffect(() => {
-    const getNames = async () => {
+    const fetchNames = async () => {
       try {
-        const data = await fetchAllPokemonNames();
-        console.log("All Pokémon names:", data);
-        setAllNames(data.map(p => p.name));
-      } catch (error) {
-        console.error("Error fetching Pokémon names:", error);
+        const res = await fetch("http://localhost:5050/api/pokemon/names/all");
+        const data = await res.json();
+        setAllNames(data);
+      } catch (err) {
+        console.error("Failed to fetch Pokémon names:", err);
       }
     };
-    getNames();
+    fetchNames();
   }, []);
 
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setSearch(value);
-
-    if (!value) {
-      setSuggestions([]);
+  // Update filtered names as user types
+  useEffect(() => {
+    if (search.length === 0) {
+      setFilteredNames([]);
       return;
     }
+    const filtered = allNames.filter((name) =>
+      name.toLowerCase().startsWith(search.toLowerCase())
+    );
+    setFilteredNames(filtered);
+  }, [search, allNames]);
 
-    const regex = new RegExp(`^${value}`, "i");
-    const filtered = allNames.filter(name => regex.test(name));
-    setSuggestions(filtered.slice(0, 5));
-  };
-
-  const handleSuggestionClick = (name) => {
-    navigate(`/pokemon/${name}`);
-    setSearch(name);
-    setSuggestions([]);
+  const handleSelect = (name) => {
+    navigate(`/pokemon/${name.toLowerCase()}`);
+    setSearch("");
+    setFilteredNames([]);
   };
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Welcome to the Pokedex</h2>
+      <h1 className={styles.title}>Welcome to the Pokedex</h1>
 
-      <div className={styles.searchWrapper}>
+      <div className={styles.searchContainer}>
         <input
           type="text"
-          placeholder="Search a Pokémon..."
+          placeholder="Search Pokémon..."
           value={search}
-          onChange={handleChange}
+          onChange={(e) => setSearch(e.target.value)}
           className={styles.searchInput}
         />
-        <ul className={styles.suggestions}>
-          {suggestions.map(name => (
-            <li
-              key={name}
-              onClick={() => handleSuggestionClick(name)}
-              className={styles.suggestionItem}
-            >
-              {name}
-            </li>
-          ))}
-        </ul>
+
+        {filteredNames.length > 0 && (
+          <ul className={styles.dropdown}>
+            {filteredNames.map((name) => (
+              <li
+                key={name}
+                onClick={() => handleSelect(name)}
+                className={styles.dropdownItem}
+              >
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
-}
+};
+
+export default HomePage;

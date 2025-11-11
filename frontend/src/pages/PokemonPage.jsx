@@ -1,4 +1,3 @@
-// frontend/src/pages/PokemonPage.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import styles from "../styles/PokemonPage.module.css";
@@ -6,21 +5,33 @@ import styles from "../styles/PokemonPage.module.css";
 const PokemonPage = () => {
   const { name } = useParams();
   const [pokemon, setPokemon] = useState(null);
+  const [evolutionSprites, setEvolutionSprites] = useState({});
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        setError(null);
         const response = await fetch(`http://localhost:5050/api/pokemon/${name}`);
-        if (!response.ok) throw new Error(`Failed to fetch Pokémon: ${response.status}`);
+        if (!response.ok) throw new Error("Failed to load Pokémon");
         const data = await response.json();
         setPokemon(data);
+
+        // Fetch sprites for evolution chain
+        if (data.evolution_chain) {
+          const sprites = {};
+          for (let evoName of data.evolution_chain) {
+            const evoRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${evoName}`);
+            const evoData = await evoRes.json();
+            sprites[evoName] = evoData.sprites.front_default;
+          }
+          setEvolutionSprites(sprites);
+        }
       } catch (err) {
-        console.error("Error fetching Pokémon:", err);
-        setError("Failed to load Pokémon. Please try again.");
+        console.error(err);
+        setError(err.message);
       }
     };
+
     fetchPokemon();
   }, [name]);
 
@@ -28,56 +39,49 @@ const PokemonPage = () => {
   if (!pokemon) return <p className={styles.loading}>Loading...</p>;
 
   return (
-    <div className={styles.page}>
+    <div className={styles.container}>
       <Link to="/" className={styles.backLink}>
-        &larr; Back to Home
+        ← Back to Pokedex
       </Link>
 
-      <div className={styles.card}>
-        <div className={styles.flexRow}>
-          <div>
-            <img
-              src={pokemon.sprites?.front_default}
-              alt={pokemon.name}
-              className={styles.image}
-            />
-            <h1 className={styles.name}>{pokemon.name}</h1>
-          </div>
+      <h1 className={styles.title}>
+        {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+      </h1>
 
-          <div>
-            <p className={styles.description}>
-              {pokemon.description || "No description available."}
-            </p>
+      <img
+        className={styles.image}
+        src={pokemon.sprite}
+        alt={pokemon.name}
+      />
 
-            <div>
-              <h2 className={styles.sectionTitle}>Types</h2>
-              <div>
-                {pokemon.types?.map((type, idx) => (
-                  <span key={idx} className={styles.typeBadge}>
-                    {type}
-                  </span>
-                ))}
-              </div>
-            </div>
+      <p>
+        <strong>Type:</strong> {pokemon.type?.join(", ")}
+      </p>
+      <p>
+        <strong>Description:</strong> {pokemon.description}
+      </p>
 
-            <div style={{ marginTop: "1.5rem" }}>
-              <h2 className={styles.sectionTitle}>Stats</h2>
-              <ul className={styles.statList}>
-                {pokemon.stats?.map((stat, index) => (
-                  <li key={index} className={styles.statItem}>
-                    <span className={styles.statName}>{stat.name}</span>
-                    <span className={styles.statValue}>{stat.value}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+      {pokemon.evolution_chain && (
+        <div className={styles.evolutionSection}>
+          <h2>Evolution Chain</h2>
+          <div className={styles.evolutionList}>
+            {pokemon.evolution_chain.map((evo) => (
+              <Link
+                key={evo}
+                to={`/pokemon/${evo}`}
+                className={styles.evolutionCard}
+              >
+                <img
+                  src={evolutionSprites[evo]}
+                  alt={evo}
+                  className={styles.evolutionImage}
+                />
+                <p>{evo.charAt(0).toUpperCase() + evo.slice(1)}</p>
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
-
-      <footer className={styles.footer}>
-        Powered by PokéAPI • Designed by Jayden Lao
-      </footer>
+      )}
     </div>
   );
 };
