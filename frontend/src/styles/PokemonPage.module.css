@@ -3,18 +3,22 @@
   margin: 50px auto;
   text-align: center;
   padding: 20px;
+  animation: fadeIn 1s ease;
 }
 
 .backLink {
   display: inline-block;
   margin-bottom: 20px;
   text-decoration: none;
-  color: #3498db;
+  color: var(--accent-color);
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 20px;
+  color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
+  animation: neonPulse 2s infinite alternate;
 }
 
 .image {
@@ -22,6 +26,11 @@
   height: 150px;
   object-fit: contain;
   margin-bottom: 20px;
+  transition: transform 0.3s;
+}
+
+.image:hover {
+  transform: scale(1.1);
 }
 
 .evolutionSection {
@@ -41,17 +50,19 @@
   align-items: center;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.3s;
 }
 
 .evolutionCard:hover {
   transform: scale(1.1);
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
 .evolutionImage {
   width: 80px;
   height: 80px;
   object-fit: contain;
+  margin-bottom: 5px;
 }
 
 .loading {
@@ -64,4 +75,18 @@
   color: red;
   text-align: center;
   margin-top: 50px;
+}
+
+@keyframes neonPulse {
+  from {
+    text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
+  }
+  to {
+    text-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

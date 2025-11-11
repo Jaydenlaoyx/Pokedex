@@ -8,7 +8,6 @@ const HomePage = () => {
   const [filteredNames, setFilteredNames] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch all Pokémon names for autocomplete
   useEffect(() => {
     const fetchNames = async () => {
       try {
@@ -22,7 +21,6 @@ const HomePage = () => {
     fetchNames();
   }, []);
 
-  // Update filtered names as user types
   useEffect(() => {
     if (search.length === 0) {
       setFilteredNames([]);

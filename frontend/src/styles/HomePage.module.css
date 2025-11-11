@@ -3,11 +3,15 @@
   margin: 50px auto;
   text-align: center;
   padding: 20px;
+  animation: fadeIn 1s ease;
 }
 
 .title {
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 2.5rem;
+  margin-bottom: 40px;
+  color: var(--accent-color);
+  text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
+  animation: neonPulse 2s infinite alternate;
 }
 
 .searchContainer {
@@ -17,39 +21,63 @@
 
 .searchInput {
   width: 100%;
-  padding: 10px 15px;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--accent-color);
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  border: 2px solid var(--accent-color);
   background-color: var(--bg-color);
   color: var(--text-color);
+  box-shadow: 0 0 10px var(--accent-color);
+  transition: box-shadow 0.3s, border-color 0.3s;
 }
 
 .searchInput::placeholder {
   color: var(--text-color);
-  opacity: 0.7;
+  opacity: 0.6;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #00ffe0;
+  box-shadow: 0 0 15px #00ffe0;
 }
 
 .dropdown {
   position: absolute;
   width: 100%;
   background: var(--card-bg);
-  border: 1px solid var(--accent-color);
+  border: 2px solid var(--accent-color);
   border-top: none;
-  border-radius: 0 0 8px 8px;
-  max-height: 200px;
+  border-radius: 0 0 12px 12px;
+  max-height: 220px;
   overflow-y: auto;
   z-index: 10;
+  box-shadow: 0 0 15px var(--accent-color);
 }
 
 .dropdownItem {
-  padding: 10px;
+  padding: 12px;
   cursor: pointer;
   text-align: left;
   color: var(--text-color);
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .dropdownItem:hover {
   background-color: var(--accent-color);
   color: var(--bg-color);
+}
+
+@keyframes neonPulse {
+  from {
+    text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
+  }
+  to {
+    text-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
