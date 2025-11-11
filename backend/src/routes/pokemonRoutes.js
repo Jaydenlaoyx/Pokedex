@@ -1,11 +1,11 @@
 import express from "express";
-import { getAllPokemon, getPokemonByName, getPokemonNames} from "../controllers/pokemonController.js";
+import { getAllPokemon, getPokemonByName, getPokemonNames } from "../controllers/pokemonController.js";
 
 const router = express.Router();
 
-router.get("/", getAllPokemon);
-router.get("/:name", getPokemonByName);
+// ✅ Specific routes must come before dynamic ones
 router.get("/names/all", getPokemonNames);
-
+router.get("/:name", getPokemonByName);
+router.get("/", getAllPokemon);
 
 export default router;

@@ -42,20 +42,6 @@
   background-color: #f0f0f0;
 }
 
-/* Pokémon card */
-.pokemonCard {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  width: fit-content;
-}
-
-.pokemonName {
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
 /* Dark mode example if using body.dark */
 :global(body.dark) .suggestions {
   background-color: #2b2b3a;
@@ -64,8 +50,4 @@
 
 :global(body.dark) .suggestionItem:hover {
   background-color: #3a3a4f;
-}
-
-:global(body.dark) .pokemonCard {
-  border-color: #444;
 }

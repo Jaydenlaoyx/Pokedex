@@ -1,24 +1,22 @@
 import express from "express";
-import dotenv from "dotenv";
+import mongoose from "mongoose";
 import cors from "cors";
-import connectDB from "./src/config/db.js";
+import dotenv from "dotenv";
 import pokemonRoutes from "./src/routes/pokemonRoutes.js";
 
 dotenv.config();
 const app = express();
-const PORT = process.env.PORT || 5050;
 
-// Middleware
-app.use(cors());
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
-// Routes
+app.get("/", (req, res) => res.send("Pokedex API is running"));
 app.use("/api/pokemon", pokemonRoutes);
 
-// Base route
-app.get("/", (req, res) => res.send("✅ Pokedex API is running!"));
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Start server after connecting to DB
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-});
+const PORT = process.env.PORT || 5050;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

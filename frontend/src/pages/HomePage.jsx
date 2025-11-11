@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { fetchAllPokemonNames, fetchPokemonByName } from "../services/api";
+import { fetchAllPokemonNames } from "../services/api";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/HomePage.module.css";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
   const [allNames, setAllNames] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const [pokemon, setPokemon] = useState(null);
+  const navigate = useNavigate();
 
-  // Fetch all Pokémon names on component mount
   useEffect(() => {
     const getNames = async () => {
       try {
         const data = await fetchAllPokemonNames();
-        setAllNames(data.map(p => p.name)); // store only names
+        console.log("All Pokémon names:", data);
+        setAllNames(data.map(p => p.name));
       } catch (error) {
         console.error("Error fetching Pokémon names:", error);
       }
@@ -21,7 +22,6 @@ export default function HomePage() {
     getNames();
   }, []);
 
-  // Handle input change and filter suggestions
   const handleChange = (e) => {
     const value = e.target.value;
     setSearch(value);
@@ -31,21 +31,15 @@ export default function HomePage() {
       return;
     }
 
-    const regex = new RegExp(`^${value}`, "i"); // starts with input
+    const regex = new RegExp(`^${value}`, "i");
     const filtered = allNames.filter(name => regex.test(name));
-    setSuggestions(filtered.slice(0, 5)); // top 5 matches
+    setSuggestions(filtered.slice(0, 5));
   };
 
-  // Handle suggestion click
-  const handleSuggestionClick = async (name) => {
-    try {
-      const data = await fetchPokemonByName(name);
-      setPokemon(data);
-      setSearch(name);
-      setSuggestions([]);
-    } catch (error) {
-      console.error("Error fetching Pokémon:", error);
-    }
+  const handleSuggestionClick = (name) => {
+    navigate(`/pokemon/${name}`);
+    setSearch(name);
+    setSuggestions([]);
   };
 
   return (
@@ -72,14 +66,6 @@ export default function HomePage() {
           ))}
         </ul>
       </div>
-
-      {pokemon && (
-        <div className={styles.pokemonCard}>
-          <h3 className={styles.pokemonName}>{pokemon.name}</h3>
-          <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-          <p>Types: {pokemon.types.join(", ")}</p>
-        </div>
-      )}
     </div>
   );
 }
