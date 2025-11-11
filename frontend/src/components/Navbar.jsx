@@ -1,20 +1,25 @@
-import React from "react";
-import { useDarkMode } from "../context/DarkModeContext";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+import { ThemeContext } from "../context/ThemeContext";
 import styles from "../styles/Navbar.module.css";
 
-export default function Navbar() {
-  const { darkMode, toggleDarkMode } = useDarkMode();
+const Navbar = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
 
   return (
-    <nav className={`${styles.navbar} ${darkMode ? styles.dark : ""}`}>
-      <h1 className={styles.title}>Pokedex</h1>
-      <div className={styles.menu}>
-        <button>Home</button>
-        <button>Pokedex</button>
-        <button>Items</button>
-        <button>Moves</button>
-        <button onClick={toggleDarkMode}>{darkMode ? "Light" : "Dark"} Mode</button>
+    <nav className={styles.navbar}>
+      <div className={styles.logo}>Pokedex</div>
+      <div className={styles.links}>
+        <Link to="/">Home</Link>
+        <Link to="/pokedex">Pokedex</Link>
+        <Link to="/items">Items</Link>
+        <Link to="/moves">Moves</Link>
       </div>
+      <button className={styles.toggle} onClick={toggleTheme}>
+        {theme === "light" ? "🌙 Dark" : "☀️ Light"}
+      </button>
     </nav>
   );
-}
+};
+
+export default Navbar;
