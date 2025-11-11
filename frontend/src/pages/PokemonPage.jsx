@@ -1,85 +1,107 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "../styles/PokemonPage.module.css";
 
 const PokemonPage = () => {
   const { name } = useParams();
   const [pokemon, setPokemon] = useState(null);
-  const [evolutionSprites, setEvolutionSprites] = useState({});
-  const [error, setError] = useState(null);
+  const [evolutionChain, setEvolutionChain] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const response = await fetch(`http://localhost:5050/api/pokemon/${name}`);
-        if (!response.ok) throw new Error("Failed to load Pokémon");
-        const data = await response.json();
+        // Fetch basic data from your backend (DB)
+        const res = await fetch(`http://localhost:5050/api/pokemon/${name}`);
+        if (!res.ok) throw new Error("Failed to load Pokémon");
+        const data = await res.json();
         setPokemon(data);
+        setLoading(false);
 
-        // Fetch sprites for evolution chain
-        if (data.evolution_chain) {
-          const sprites = {};
-          for (let evoName of data.evolution_chain) {
-            const evoRes = await fetch(`https://pokeapi.co/api/v2/pokemon/${evoName}`);
-            const evoData = await evoRes.json();
-            sprites[evoName] = evoData.sprites.front_default;
-          }
-          setEvolutionSprites(sprites);
-        }
+        // Fetch evolution chain dynamically from PokéAPI
+        const resSpecies = await fetch(
+          `https://pokeapi.co/api/v2/pokemon-species/${name}`
+        );
+        const speciesData = await resSpecies.json();
+
+        const resEvolution = await fetch(speciesData.evolution_chain.url);
+        const evoData = await resEvolution.json();
+
+        setEvolutionChain(parseEvolution(evoData.chain));
       } catch (err) {
         console.error(err);
-        setError(err.message);
+        setLoading(false);
       }
     };
 
     fetchPokemon();
   }, [name]);
 
-  if (error) return <p className={styles.error}>{error}</p>;
-  if (!pokemon) return <p className={styles.loading}>Loading...</p>;
+  // Helper to parse the nested evolution chain
+  const parseEvolution = (chain) => {
+    const evoArray = [];
+    let current = chain;
+
+    while (current) {
+      evoArray.push(current.species.name);
+      if (current.evolves_to.length > 0) {
+        current = current.evolves_to[0];
+      } else {
+        current = null;
+      }
+    }
+
+    return evoArray;
+  };
+
+  if (loading) return <p className={styles.loading}>Loading...</p>;
+  if (!pokemon) return <p className={styles.loading}>Failed to load Pokémon. Please try again.</p>;
 
   return (
     <div className={styles.container}>
-      <Link to="/" className={styles.backLink}>
-        ← Back to Pokedex
-      </Link>
-
       <h1 className={styles.title}>
         {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
       </h1>
 
       <img
-        className={styles.image}
-        src={pokemon.sprite}
+        src={pokemon.sprite || "https://via.placeholder.com/150"}
         alt={pokemon.name}
+        className={styles.sprite}
       />
 
-      <p>
-        <strong>Type:</strong> {pokemon.type?.join(", ")}
-      </p>
-      <p>
-        <strong>Description:</strong> {pokemon.description}
-      </p>
+      {/* Types */}
+      <div className={styles.types}>
+        {pokemon.types?.map((type) => (
+          <span key={type} className={`${styles.type} ${styles[type]}`}>
+            {type}
+          </span>
+        ))}
+      </div>
 
-      {pokemon.evolution_chain && (
-        <div className={styles.evolutionSection}>
+      {/* Evolution chain */}
+      {evolutionChain.length > 0 && (
+        <div className={styles.evolution}>
           <h2>Evolution Chain</h2>
-          <div className={styles.evolutionList}>
-            {pokemon.evolution_chain.map((evo) => (
-              <Link
-                key={evo}
-                to={`/pokemon/${evo}`}
-                className={styles.evolutionCard}
-              >
-                <img
-                  src={evolutionSprites[evo]}
-                  alt={evo}
-                  className={styles.evolutionImage}
-                />
-                <p>{evo.charAt(0).toUpperCase() + evo.slice(1)}</p>
-              </Link>
+          <div className={styles.evoChain}>
+            {evolutionChain.map((p, idx) => (
+              <React.Fragment key={p}>
+                <span>{p.charAt(0).toUpperCase() + p.slice(1)}</span>
+                {idx < evolutionChain.length - 1 && <span className={styles.arrow}>→</span>}
+              </React.Fragment>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Stats (optional if stored in DB) */}
+      {pokemon.stats && (
+        <div className={styles.stats}>
+          {pokemon.stats.map((stat) => (
+            <div key={stat.name} className={styles.stat}>
+              <span>{stat.name}</span>
+              <span>{stat.value}</span>
+            </div>
+          ))}
         </div>
       )}
     </div>

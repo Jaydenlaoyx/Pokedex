@@ -1,39 +1,60 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 import axios from "axios";
 import Pokemon from "../models/Pokemon.js";
-import connectDB from "../config/db.js";
 
 dotenv.config();
 
 const seedPokemon = async () => {
   try {
-    await connectDB();
-    console.log("🌱 Starting Pokémon seeding...");
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connected");
 
-    const pokemons = [];
+    // Original 151 Pokémon
+    const names = [
+      "bulbasaur","ivysaur","venusaur","charmander","charmeleon","charizard",
+      "squirtle","wartortle","blastoise","caterpie","metapod","butterfree",
+      "weedle","kakuna","beedrill","pidgey","pidgeotto","pidgeot","rattata",
+      "raticate","spearow","fearow","ekans","arbok","pikachu","raichu",
+      "sandshrew","sandslash","nidoran-f","nidorina","nidoqueen","nidoran-m",
+      "nidorino","nidoking","clefairy","clefable","vulpix","ninetales","jigglypuff",
+      "wigglytuff","zubat","golbat","oddish","gloom","vileplume","paras","parasect",
+      "venonat","venomoth","diglett","dugtrio","meowth","persian","psyduck","golduck",
+      "mankey","primeape","growlithe","arcanine","poliwag","poliwhirl","poliwrath",
+      "abra","kadabra","alakazam","machop","machoke","machamp","bellsprout","weepinbell",
+      "victreebel","tentacool","tentacruel","geodude","graveler","golem","ponyta",
+      "rapidash","slowpoke","slowbro","magnemite","magneton","farfetchd","doduo",
+      "dodrio","seel","dewgong","grimer","muk","shellder","cloyster","gastly","haunter",
+      "gengar","onix","drowzee","hypno","krabby","kingler","voltorb","electrode",
+      "exeggcute","exeggutor","cubone","marowak","hitmonlee","hitmonchan","lickitung",
+      "koffing","weezing","rhyhorn","rhydon","chansey","tangela","kangaskhan",
+      "horsea","seadra","goldeen","seaking","staryu","starmie","mr-mime","scyther",
+      "jynx","electabuzz","magmar","pinsir","tauros","magikarp","gyarados","lapras",
+      "ditto","eevee","vaporeon","jolteon","flareon","porygon","omanyte","omastar",
+      "kabuto","kabutops","aerodactyl","snorlax","articuno","zapdos","moltres",
+      "dratini","dragonair","dragonite","mewtwo","mew"
+    ];
 
-    for (let i = 1; i <= 151; i++) {
-      const response = await axios.get(`${process.env.POKEAPI_BASE}/pokemon/${i}`);
-      const data = response.data;
+    const pokemonData = [];
 
-      pokemons.push({
-        name: data.name,
-        types: data.types.map(t => t.type.name),
-        sprites: { front_default: data.sprites.front_default }
-      });
+    for (let name of names) {
+      try {
+        const res = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`);
+        const sprite = res.data.sprites.front_default;
+        pokemonData.push({ name, sprite });
+      } catch (err) {
+        console.log(`Failed to fetch ${name}: ${err.message}`);
+      }
     }
 
-    await Pokemon.deleteMany();
-    console.log("🗑️ Cleared old Pokémon data");
+    // Clear old data and insert new
+    await Pokemon.deleteMany({});
+    await Pokemon.insertMany(pokemonData);
 
-    await Pokemon.insertMany(pokemons);
-    console.log("✅ Inserted 151 Pokémon");
-
-    mongoose.connection.close();
-    console.log("🔒 Connection closed");
-  } catch (error) {
-    console.error("❌ Error seeding Pokémon:", error.message);
+    console.log("✅ Seeded Pokémon with sprites");
+    mongoose.disconnect();
+  } catch (err) {
+    console.error(err);
     process.exit(1);
   }
 };

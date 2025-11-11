@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 
-const pokemonSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  types: [String],
-  sprites: {
-    front_default: String,
-  },
+const pokemonSchema = mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  sprite: { type: String }, // sprite URL
 });
 
 const Pokemon = mongoose.model("Pokemon", pokemonSchema);
+
 export default Pokemon;
