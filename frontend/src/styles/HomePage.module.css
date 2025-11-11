@@ -20,14 +20,21 @@
   padding: 10px 15px;
   font-size: 1rem;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--accent-color);
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.searchInput::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
 }
 
 .dropdown {
   position: absolute;
   width: 100%;
-  background: #fff;
-  border: 1px solid #ccc;
+  background: var(--card-bg);
+  border: 1px solid var(--accent-color);
   border-top: none;
   border-radius: 0 0 8px 8px;
   max-height: 200px;
@@ -39,8 +46,10 @@
   padding: 10px;
   cursor: pointer;
   text-align: left;
+  color: var(--text-color);
 }
 
 .dropdownItem:hover {
-  background-color: #f0f0f0;
+  background-color: var(--accent-color);
+  color: var(--bg-color);
 }
