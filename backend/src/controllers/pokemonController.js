@@ -20,3 +20,13 @@ export const getPokemonByName = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// Get all Pokémon names
+export const getPokemonNames = async (req, res) => {
+  try {
+    const pokemons = await Pokemon.find({}, "name"); // only fetch names
+    res.json(pokemons);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

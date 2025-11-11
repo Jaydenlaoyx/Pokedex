@@ -1,33 +1,81 @@
-import React, { useState } from "react";
-import { fetchPokemonByName } from "../services/api";
+import React, { useState, useEffect } from "react";
+import { fetchAllPokemonNames, fetchPokemonByName } from "../services/api";
 import styles from "../styles/HomePage.module.css";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
+  const [allNames, setAllNames] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [pokemon, setPokemon] = useState(null);
 
-  const handleSearch = async () => {
-    if (!search) return;
-    const data = await fetchPokemonByName(search);
-    setPokemon(data);
+  // Fetch all Pokémon names on component mount
+  useEffect(() => {
+    const getNames = async () => {
+      try {
+        const data = await fetchAllPokemonNames();
+        setAllNames(data.map(p => p.name)); // store only names
+      } catch (error) {
+        console.error("Error fetching Pokémon names:", error);
+      }
+    };
+    getNames();
+  }, []);
+
+  // Handle input change and filter suggestions
+  const handleChange = (e) => {
+    const value = e.target.value;
+    setSearch(value);
+
+    if (!value) {
+      setSuggestions([]);
+      return;
+    }
+
+    const regex = new RegExp(`^${value}`, "i"); // starts with input
+    const filtered = allNames.filter(name => regex.test(name));
+    setSuggestions(filtered.slice(0, 5)); // top 5 matches
+  };
+
+  // Handle suggestion click
+  const handleSuggestionClick = async (name) => {
+    try {
+      const data = await fetchPokemonByName(name);
+      setPokemon(data);
+      setSearch(name);
+      setSuggestions([]);
+    } catch (error) {
+      console.error("Error fetching Pokémon:", error);
+    }
   };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Welcome to the Pokedex</h2>
-      <div className={styles.searchBar}>
+
+      <div className={styles.searchWrapper}>
         <input
           type="text"
-          placeholder="Search a Pokemon..."
+          placeholder="Search a Pokémon..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleChange}
+          className={styles.searchInput}
         />
-        <button onClick={handleSearch}>Search</button>
+        <ul className={styles.suggestions}>
+          {suggestions.map(name => (
+            <li
+              key={name}
+              onClick={() => handleSuggestionClick(name)}
+              className={styles.suggestionItem}
+            >
+              {name}
+            </li>
+          ))}
+        </ul>
       </div>
 
       {pokemon && (
         <div className={styles.pokemonCard}>
-          <h3>{pokemon.name}</h3>
+          <h3 className={styles.pokemonName}>{pokemon.name}</h3>
           <img src={pokemon.sprites.front_default} alt={pokemon.name} />
           <p>Types: {pokemon.types.join(", ")}</p>
         </div>
