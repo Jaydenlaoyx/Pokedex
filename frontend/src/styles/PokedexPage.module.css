@@ -29,7 +29,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr); /* Fixed 8 per row */
+  grid-template-columns: repeat(8, 1fr);
   gap: 1rem;
   justify-items: center;
   padding: 0 0.5rem;
@@ -70,18 +70,16 @@
 .card:hover {
   transform: scale(1.05);
   background-color: rgba(255, 255, 255, 0.05);
-  /* Theme-aware glow */
-  box-shadow: 0 10px 30px
-    var(--card-glow-color, rgba(0, 255, 204, 0.3));
+  box-shadow: 0 10px 30px var(--card-glow-color, rgba(0, 255, 204, 0.3));
   z-index: 1;
 }
 
 body[data-theme="light"] .card:hover {
-  box-shadow: 0 10px 30px rgba(0, 119, 255, 0.3); /* blue glow for light mode */
+  box-shadow: 0 10px 30px rgba(0, 119, 255, 0.3);
 }
 
 body[data-theme="dark"] .card:hover {
-  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.3); /* greenish glow for dark mode */
+  box-shadow: 0 10px 30px rgba(0, 255, 204, 0.3);
 }
 
 .sprite {
@@ -126,8 +124,80 @@ body[data-theme="dark"] .card:hover {
   color: #fff;
 }
 
+/* --- Loading shimmer --- */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.2) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.spritePlaceholder {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 0.5rem;
+  border-radius: 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.namePlaceholder {
+  height: 14px;
+  width: 60%;
+  margin: 0.2rem auto;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.typePlaceholder {
+  height: 12px;
+  width: 40%;
+  margin: 0.2rem auto;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .loading {
   text-align: center;
   padding: 2rem;
   font-weight: 600;
+}
+
+/* Fade-in animation for loaded cards */
+.fadeIn {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
