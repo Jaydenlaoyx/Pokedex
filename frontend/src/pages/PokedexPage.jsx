@@ -38,6 +38,7 @@ const PokedexPage = () => {
     navigate(`/pokemon/${name}`);
   };
 
+  // shimmer placeholders while loading
   const shimmerArray = Array.from({ length: 16 });
 
   return (
@@ -87,7 +88,7 @@ const PokedexPage = () => {
                 <div className={styles.cardGlow}></div>
                 <div
                   className={`${styles.card} ${styles.fadeIn}`}
-                  style={{ animationDelay: `${idx * 50}ms` }}
+                  style={{ animationDelay: `${idx * 20}ms` }}
                   onClick={() => handleCardClick(p.name)}
                 >
                   <div className={styles.number}>

@@ -3,7 +3,7 @@ import Pokemon from "../models/Pokemon.js";
 // Get all Pokémon (for Pokedex page)
 export const getAllPokemon = async (req, res) => {
   try {
-    const pokemons = await Pokemon.find(); // returns name + sprite
+    const pokemons = await Pokemon.find(); // fetch all Pokémon
     res.json(pokemons);
   } catch (err) {
     res.status(500).json({ message: err.message });
