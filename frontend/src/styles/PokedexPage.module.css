@@ -3,7 +3,7 @@
   --text-color: #f5f5f5;
   --accent-color: #00ffcc;
   --card-bg: #2a2a2a;
-  --card-glow-color: rgba(0, 255, 204, 0.3);
+  --card-glow-color: rgba(0, 255, 204, 0.4);
 }
 
 [data-theme="light"] {
@@ -11,7 +11,7 @@
   --text-color: #1f1f1f;
   --accent-color: #0077ff;
   --card-bg: #ffffff;
-  --card-glow-color: rgba(0, 119, 255, 0.3);
+  --card-glow-color: rgba(0, 119, 255, 0.25);
 }
 
 body {
@@ -76,22 +76,21 @@ body {
   }
 }
 
-/* NEW: card wrapper for scale overflow hidden */
+/* Card wrapper and glow layer */
 .cardWrapper {
   position: relative;
   width: 100%;
 }
 
-/* Glow layer allows hover glow to exceed wrapper */
 .cardGlow {
   position: absolute;
-  top: -10px;
-  left: -10px;
-  right: -10px;
-  bottom: -10px;
+  top: -12px;
+  left: -12px;
+  right: -12px;
+  bottom: -12px;
   border-radius: 12px;
   pointer-events: none;
-  box-shadow: 0 10px 30px var(--card-glow-color);
+  box-shadow: 0 0 20px var(--card-glow-color), 0 0 40px var(--card-glow-color);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -109,11 +108,11 @@ body {
   cursor: pointer;
   transition: transform 0.3s, background-color 0.3s;
   position: relative;
+  z-index: 0;
 }
 
 .card:hover {
-  transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.05);
+  transform: scale(1.08);
   z-index: 1;
 }
 
@@ -159,7 +158,7 @@ body {
   -webkit-backdrop-filter: blur(4px);
 }
 
-/* --- Loading shimmer --- */
+/* Loading shimmer */
 .shimmer {
   position: relative;
   overflow: hidden;
@@ -217,7 +216,7 @@ body {
   font-weight: 600;
 }
 
-/* --- Fade-in animation for loaded cards with stagger --- */
+/* Fade-in animation */
 .fadeIn {
   opacity: 0;
   transform: translateY(10px);

@@ -73,7 +73,10 @@ const PokedexPage = () => {
       <div className={styles.grid}>
         {loading
           ? shimmerArray.map((_, idx) => (
-              <div key={idx} className={`${styles.cardWrapper} ${styles.shimmer}`}>
+              <div
+                key={idx}
+                className={`${styles.cardWrapper} ${styles.shimmer}`}
+              >
                 <div className={styles.spritePlaceholder}></div>
                 <div className={styles.namePlaceholder}></div>
                 <div className={styles.typePlaceholder}></div>
