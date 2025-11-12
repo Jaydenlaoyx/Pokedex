@@ -1,123 +1,39 @@
-/* Root variables for light/dark mode */
-:root {
-  --bg-color: #0f0f0f;
-  --text-color: #ffffff;
-  --card-bg: #1a1a1a;
-  --accent-color: #00ffe0;
-  --type-bg: #222;
-}
-
-/* Container */
 .container {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 20px;
   text-align: center;
-  animation: fadeIn 1s ease;
   color: var(--text-color);
+  padding: 2rem;
 }
 
-/* Title */
-.title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
+.name {
+  font-size: 2rem;
   color: var(--accent-color);
-  text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color);
-  animation: neonPulse 2s infinite alternate;
+  margin-bottom: 1rem;
 }
 
-/* Sprite */
 .sprite {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
-  margin-bottom: 20px;
 }
 
-/* Types */
-.types {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
+.description {
+  max-width: 600px;
+  margin: 1rem auto;
+  font-style: italic;
 }
 
-.type {
-  padding: 5px 10px;
-  border-radius: 8px;
-  background-color: var(--type-bg);
-  text-transform: capitalize;
-  font-weight: bold;
-  box-shadow: 0 0 5px var(--accent-color);
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-/* Evolution chain */
 .evolution {
-  margin: 30px 0;
+  margin-top: 2rem;
 }
 
-.evolution h2 {
-  margin-bottom: 10px;
-  color: var(--accent-color);
-  text-shadow: 0 0 5px var(--accent-color);
-}
-
-.evoChain {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.evoChain span {
-  padding: 5px 10px;
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  box-shadow: 0 0 10px var(--accent-color);
-  text-transform: capitalize;
+.chain {
   font-weight: bold;
-}
-
-.arrow {
-  font-size: 1.2rem;
   color: var(--accent-color);
-  text-shadow: 0 0 5px var(--accent-color);
-}
-
-/* Stats */
-.stats {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.stat {
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--card-bg);
-  padding: 5px 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px var(--accent-color);
-  text-transform: capitalize;
-}
-
-/* Loading text */
-.loading {
-  text-align: center;
-  font-size: 1.2rem;
-  margin-top: 50px;
-  color: var(--accent-color);
-}
-
-/* Animations */
-@keyframes neonPulse {
-  from { text-shadow: 0 0 10px var(--accent-color), 0 0 20px var(--accent-color); }
-  to { text-shadow: 0 0 20px #00ffe0, 0 0 40px #00ffe0; }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
 }
