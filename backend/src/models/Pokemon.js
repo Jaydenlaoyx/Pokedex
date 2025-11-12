@@ -1,16 +1,21 @@
 import mongoose from "mongoose";
 
+const evolutionSchema = new mongoose.Schema({
+  name: String,
+  sprite: String,
+});
+
 const pokemonSchema = new mongoose.Schema({
   name: { type: String, required: true },
   nationalDexNumber: { type: Number },
   types: [String],
   species: { type: String },
-  height: { type: Number }, // in meters
-  weight: { type: Number }, // in kilograms
+  height: { type: Number },
+  weight: { type: Number },
   abilities: [String],
   sprite: { type: String },
   description: { type: String },
-  evolution_chain: [String],
+  evolution_chain: [evolutionSchema],
 });
 
 const Pokemon = mongoose.model("Pokemon", pokemonSchema);

@@ -15,7 +15,6 @@ const seedPokemon = async () => {
     await Pokemon.deleteMany({});
     console.log("🗑️ Cleared existing Pokémon");
 
-    // For now, seed the first 151 Pokémon
     const limit = 151;
     const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}`);
 
@@ -33,13 +32,20 @@ const seedPokemon = async () => {
         ? descriptionEntry.flavor_text.replace(/\f/g, " ").replace(/\n/g, " ")
         : "No description available.";
 
+      // Fetch evolution chain data
       const evolutionUrl = speciesData.data.evolution_chain.url;
       const evolutionData = await axios.get(evolutionUrl);
 
       const chain = [];
       let current = evolutionData.data.chain;
+
       while (current) {
-        chain.push(current.species.name);
+        const evoName = current.species.name;
+        const evoData = await axios.get(`https://pokeapi.co/api/v2/pokemon/${evoName}`);
+        chain.push({
+          name: evoName,
+          sprite: evoData.data.sprites.other["official-artwork"].front_default,
+        });
         current = current.evolves_to[0];
       }
 
