@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "../styles/PokedexPage.module.css";
-import { typeColors, hexToRgba } from "../utils/typeUtils"; // shared utility
+import { typeColors, hexToRgba } from "../utils/typeUtils";
 import { useNavigate } from "react-router-dom";
 
 const PokedexPage = () => {
@@ -38,7 +38,7 @@ const PokedexPage = () => {
     navigate(`/pokemon/${name}`);
   };
 
-  const shimmerArray = Array.from({ length: 16 }); // placeholder count
+  const shimmerArray = Array.from({ length: 16 });
 
   return (
     <div className={styles.container}>
@@ -79,10 +79,11 @@ const PokedexPage = () => {
                 <div className={styles.typePlaceholder}></div>
               </div>
             ))
-          : filteredPokemon.map((p) => (
+          : filteredPokemon.map((p, idx) => (
               <div
                 key={p.name}
                 className={`${styles.card} ${styles.fadeIn}`}
+                style={{ animationDelay: `${idx * 50}ms` }} // stagger effect
                 onClick={() => handleCardClick(p.name)}
               >
                 <div className={styles.number}>
