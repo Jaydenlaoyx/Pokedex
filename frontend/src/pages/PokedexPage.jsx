@@ -73,41 +73,43 @@ const PokedexPage = () => {
       <div className={styles.grid}>
         {loading
           ? shimmerArray.map((_, idx) => (
-              <div key={idx} className={`${styles.card} ${styles.shimmer}`}>
+              <div key={idx} className={`${styles.cardWrapper} ${styles.shimmer}`}>
                 <div className={styles.spritePlaceholder}></div>
                 <div className={styles.namePlaceholder}></div>
                 <div className={styles.typePlaceholder}></div>
               </div>
             ))
           : filteredPokemon.map((p, idx) => (
-              <div
-                key={p.name}
-                className={`${styles.card} ${styles.fadeIn}`}
-                style={{ animationDelay: `${idx * 50}ms` }} // stagger effect
-                onClick={() => handleCardClick(p.name)}
-              >
-                <div className={styles.number}>
-                  #{String(p.nationalDexNumber).padStart(3, "0")}
-                </div>
-                <div className={styles.name}>{p.name.toUpperCase()}</div>
-                <img src={p.sprite} alt={p.name} className={styles.sprite} />
-                <div className={styles.types}>
-                  {p.types.map((type) => {
-                    const hex = typeColors[type] || "#777";
-                    return (
-                      <span
-                        key={type}
-                        className={styles.typeBadge}
-                        style={{
-                          backgroundColor: hexToRgba(hex, 0.35),
-                          borderColor: hexToRgba(hex, 0.5),
-                          color: "#fff",
-                        }}
-                      >
-                        {type.toUpperCase()}
-                      </span>
-                    );
-                  })}
+              <div key={p.name} className={styles.cardWrapper}>
+                <div className={styles.cardGlow}></div>
+                <div
+                  className={`${styles.card} ${styles.fadeIn}`}
+                  style={{ animationDelay: `${idx * 50}ms` }}
+                  onClick={() => handleCardClick(p.name)}
+                >
+                  <div className={styles.number}>
+                    #{String(p.nationalDexNumber).padStart(3, "0")}
+                  </div>
+                  <div className={styles.name}>{p.name.toUpperCase()}</div>
+                  <img src={p.sprite} alt={p.name} className={styles.sprite} />
+                  <div className={styles.types}>
+                    {p.types.map((type) => {
+                      const hex = typeColors[type] || "#777";
+                      return (
+                        <span
+                          key={type}
+                          className={styles.typeBadge}
+                          style={{
+                            backgroundColor: hexToRgba(hex, 0.35),
+                            borderColor: hexToRgba(hex, 0.5),
+                            color: "#fff",
+                          }}
+                        >
+                          {type.toUpperCase()}
+                        </span>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             ))}
