@@ -8,6 +8,7 @@ const evolutionSchema = new mongoose.Schema({
 const pokemonSchema = new mongoose.Schema({
   name: { type: String, required: true },
   nationalDexNumber: { type: Number },
+  generation: { type: Number, required: true }, // <- added this
   types: [String],
   species: { type: String },
   height: { type: Number },

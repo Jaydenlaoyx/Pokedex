@@ -27,10 +27,17 @@ const PokedexPage = () => {
   }, []);
 
   const filteredPokemon = pokemonList.filter((p) => {
+    // type filter
     const typeMatch = typeFilter ? p.types.includes(typeFilter) : true;
-    const genMatch = generationFilter
-      ? p.generation === parseInt(generationFilter)
-      : true;
+
+    // generation filter
+    let genMatch = true;
+    if (generationFilter) {
+      const pokemonGen = Number(p.generation || 0);
+      const selectedGen = Number(generationFilter);
+      genMatch = pokemonGen === selectedGen;
+    }
+
     return typeMatch && genMatch;
   });
 
@@ -38,7 +45,6 @@ const PokedexPage = () => {
     navigate(`/pokemon/${name}`);
   };
 
-  // shimmer placeholders while loading
   const shimmerArray = Array.from({ length: 16 });
 
   return (
@@ -63,9 +69,9 @@ const PokedexPage = () => {
           onChange={(e) => setGenerationFilter(e.target.value)}
         >
           <option value="">All Generations</option>
-          {[...Array(9).keys()].map((i) => (
-            <option key={i + 1} value={i + 1}>
-              Gen {i + 1}
+          {[1, 2, 3].map((i) => (
+            <option key={i} value={i}>
+              Gen {i}
             </option>
           ))}
         </select>
