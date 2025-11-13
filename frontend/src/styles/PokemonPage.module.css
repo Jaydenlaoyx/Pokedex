@@ -3,60 +3,57 @@
   justify-content: center;
   padding: 2rem 1rem;
   min-height: 100vh;
+  position: relative;
 }
 
+/* BACK BUTTON */
+.backBtn {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.5rem;
+  padding: 0.4rem 0.8rem;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.backBtn:hover {
+  transform: scale(1.05);
+  opacity: 0.85;
+}
+
+/* MAIN CARD */
 .card {
   background-color: var(--card-bg);
   color: var(--text-color);
   width: 100%;
   max-width: 980px;
   border-radius: 16px;
-  padding: 1.6rem;
+  padding: 1.8rem 1.6rem 2.4rem;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
   transition: background-color 0.3s, color 0.3s;
+  position: relative;
 }
 
-.header {
+/* TITLE */
+.name {
   text-align: center;
-  margin-bottom: 1rem;
-}
-
-.title {
-  font-size: 1.75rem;
   color: var(--accent-color);
-  margin: 0;
-  letter-spacing: 0.06em;
+  font-size: 1.9rem;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.05em;
 }
 
-.types {
+/* IMAGE SECTION */
+.imageSection {
   display: flex;
-  justify-content: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-}
-
-.typeBadge {
-  padding: 0.35rem 0.72rem;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 0.82rem;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #fff;
-}
-
-.mainRow {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-
-.spriteCol {
-  flex: 0 0 260px;
-  display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  margin: 1.2rem 0;
 }
 
 .sprite {
@@ -65,70 +62,177 @@
   object-fit: contain;
   border-radius: 12px;
   padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 0.6rem;
+  transition: transform 0.3s;
 }
 
-.detailsCol {
-  flex: 1 1 380px;
-  min-width: 260px;
+.sprite:hover {
+  transform: scale(1.05) rotate(3deg);
 }
 
+/* SHINY TOGGLE */
+.shinyToggle {
+  background-color: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  font-weight: 600;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.shinyToggle:hover {
+  background-color: var(--accent-color);
+  color: var(--bg-color);
+}
+
+/* TYPES */
+.types {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.typeBadge {
+  padding: 0.35rem 0.72rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  text-transform: capitalize;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s;
+}
+
+/* DESCRIPTION */
 .description {
   font-style: italic;
   color: var(--text-color);
-  margin-bottom: 1rem;
+  margin: 0.5rem 0 1.4rem;
   line-height: 1.4;
+  padding: 0 1rem;
 }
 
-.detailGrid {
+/* BASIC INFO GRID */
+.basicInfo {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 0.6rem 1rem;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.9rem;
-  border-radius: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem 1rem;
+  justify-items: center;
+  margin-bottom: 1.8rem;
 }
 
-.detailRow {
-  display: contents;
+.basicInfo div {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
-.label {
-  color: var(--text-color);
-  font-weight: 600;
-  font-size: 0.92rem;
+/* STATS */
+.stats {
+  margin-top: 1.5rem;
+  text-align: left;
 }
 
-.value {
-  color: var(--accent-color);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.evolution {
-  margin-top: 1.4rem;
-}
-
-.evoTitle {
+.stats h3 {
   color: var(--accent-color);
   margin-bottom: 0.6rem;
-  font-size: 1.05rem;
+  text-align: center;
 }
 
-.evoChain {
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0.3rem 0;
+  font-size: 0.85rem;
+}
+
+.bar {
+  background: rgba(255, 255, 255, 0.08);
+  height: 10px;
+  flex-grow: 1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.fill {
+  background: var(--accent-color);
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.5s;
+}
+
+/* MOVES */
+.moves {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.moves h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.6rem;
+}
+
+.moves ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.4rem;
+  max-width: 600px;
+}
+
+.moveItem {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  text-transform: capitalize;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.85rem;
+}
+
+.moveItem:hover {
+  background: var(--accent-color);
+  color: var(--bg-color);
+}
+
+/* EVOLUTION */
+.evolution {
+  margin-top: 2.2rem;
+  text-align: center;
+}
+
+.evolution h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.8rem;
+}
+
+.evoList {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
-.evoItem {
+.evoCard {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 96px;
   padding: 6px;
+  transition: transform 0.3s;
+}
+
+.evoCard:hover {
+  transform: scale(1.1);
 }
 
 .evoSprite {
@@ -139,19 +243,24 @@
   margin-bottom: 6px;
 }
 
-.evoName {
-  font-weight: 700;
-  font-size: 0.88rem;
-  text-transform: capitalize;
-  text-align: center;
-  color: var(--text-color);
+.spritePlaceholder {
+  width: 88px;
+  height: 88px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  margin-bottom: 6px;
 }
 
+/* arrows between evo cards */
 .evoArrow {
   color: var(--accent-color);
-  font-size: 1.25rem;
+  font-size: 1.4rem;
+  margin: 0 6px;
+  display: flex;
+  align-items: center;
 }
 
+/* FEEDBACK */
 .loading,
 .error {
   text-align: center;
@@ -162,12 +271,15 @@
   color: #e63946;
 }
 
+/* RESPONSIVE */
 @media (max-width: 880px) {
-  .mainRow {
-    flex-direction: column;
-    align-items: center;
+  .basicInfo {
+    grid-template-columns: 1fr 1fr;
   }
-  .detailGrid {
-    grid-template-columns: 1fr;
+
+  .stats,
+  .moves,
+  .evolution {
+    text-align: center;
   }
 }
