@@ -1,0 +1,108 @@
+/* frontend/src/styles/ItemsPage.module.css */
+:root {
+  --card-bg: var(--card-bg, #2a2a2a);
+  --text-color: var(--text-color, #f5f5f5);
+  --accent-color: var(--accent-color, #00ffcc);
+  --card-glow-color: rgba(0,255,204,0.25);
+}
+
+.container {
+  padding: 2rem 1rem;
+  min-height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.filterSelect {
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.searchInput {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: transparent;
+  color: var(--text-color);
+  min-width: 180px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 1rem;
+  justify-items: center;
+}
+
+/* responsive */
+@media (max-width: 1200px) { .grid { grid-template-columns: repeat(6, 1fr); } }
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 600px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+
+.cardWrapper { position: relative; width: 100%; }
+.cardGlow {
+  position: absolute;
+  top: -8px; left: -8px; right: -8px; bottom: -8px;
+  border-radius: 12px;
+  box-shadow: 0 0 18px var(--card-glow-color);
+  opacity: 0; transition: opacity 0.2s;
+}
+.cardWrapper:hover .cardGlow { opacity: 1; }
+
+.card {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 12px;
+  padding: 0.8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.18s;
+}
+.card:hover { transform: translateY(-6px); }
+
+.sprite {
+  width: 72px; height: 72px; object-fit: contain; margin-bottom: 0.4rem;
+}
+.spritePlaceholder {
+  width: 72px; height: 72px; border-radius: 8px; background: rgba(255,255,255,0.04); margin: 0 auto 0.4rem;
+}
+
+.number { font-size: 0.75rem; color: var(--accent-color); margin-bottom: 0.2rem; font-weight:700; }
+.name { font-weight:700; margin-bottom:0.25rem; }
+.types { margin-bottom: 0.4rem; }
+.typeBadge {
+  display:inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  font-size:0.7rem;
+  background: rgba(255,255,255,0.04);
+  color: var(--text-color);
+  font-weight:700;
+}
+
+.short { font-size:0.75rem; color: rgba(255,255,255,0.7); margin-top:0.4rem; }
+
+/* shimmer */
+.shimmer { position:relative; overflow:hidden; background: rgba(255,255,255,0.02); }
+.shimmer::after {
+  content:""; position:absolute; left:-150%; top:0; width:150%; height:100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer { 0%{left:-150%} 100%{left:100%} }
